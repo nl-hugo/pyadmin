@@ -1,0 +1,8 @@
+#mapid { height: 300px; }
+
+.destination {
+  text-align: center;
+  line-height: 30px;
+  color: #593196;
+  opacity: 0.75;
+}

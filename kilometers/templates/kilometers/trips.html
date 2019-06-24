@@ -1,0 +1,198 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Trips</li>
+</ol>
+</nav>
+
+
+<div class="row">
+    <div class="col-sm">
+        <form method="get">
+            {{ form.as_p }}
+            <button type="submit">Search</button>
+        </form>
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="text">Kwartaal</th>
+                    <th scope="col" class="text-right">Afstand (km)</th>
+                    <th scope="col" class="text-right">Vergoeding</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in quarterly %}
+                <tr>
+                    <td class="text">{{ trip.quarter }}</td>
+                    <td class="text-right">{{ trip.distance }}</td>
+                    <td class="text-right">€{{ trip.allowance|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No trips yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-sm">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="text">Bestemming</th>
+                    <th scope="col" class="text-right">Aantal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for destination in destinations|slice:":4" %}
+                <tr>
+                    <td class="text">{{ destination.destination__name }}</td>
+                    <td class="text-right">{{ destination.count }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No destinations yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-sm">
+        <div id="mapid"></div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-sm">
+        <h4>Laatste 10</h4>
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="text-right"></th>
+                    <th scope="col" class="text">Datum</th>
+                    <th scope="col" class="text">Van</th>
+                    <th scope="col" class="text"></th>
+                    <th scope="col" class="text">Naar</th>
+                    <th scope="col" class="text-right">Afstand (km)</th>
+                    <th scope="col" class="text-right">Vergoeding</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in trips %}
+                <tr>
+                    <td class="text-right">
+                        {% if trip.api_return_code != '200' %}
+                        <i class="fas fa-exclamation-triangle text-warning" title="{{ trip.api_message }}"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text">{{ trip.date|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td class="text">{{ trip.origin }}</td>
+                    <td class="text-right">
+                        {% if trip.is_return %}
+                        <i class="fas fa-exchange-alt text-primary" title="retour"></i>
+                        {% else %}
+                        <i class="fas fa-long-arrow-alt-right text-secondary" title="enkele reis"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text">{{ trip.destination }}</td>
+                    <td class="text-right">{{ trip.distance }}</td>
+                    <td class="text-right">€{{ trip.allowance }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No trips yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col" class="text"></th>
+                    <th scope="col" class="text">{{ trips.paginator.count }} trips</th>
+                    <th scope="col" class="text"></th>
+                    <th scope="col" class="text"></th>
+                    <th scope="col" class="text"></th>
+                    <th scope="col" class="text-right">{{ total_distance }}</th>
+                    <th scope="col" class="text-right">€{{ total_allowance|floatformat:2 }}</th>
+                </tr>
+            </thead>
+        </table>
+
+        <nav>
+            <ul class="pagination">
+                {% if trips.paginator.num_pages >= 2 %}
+                    {% for i in trips.paginator.page_range %}
+                    {% if i == trips.number %}
+                        <li class="page-item active">
+                    {% else %}
+                        <li class="page-item">
+                    {% endif %}
+                    <a class="page-link" href="?page={{ i }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ i }}</a></li>                
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>
+</div>
+
+{{ destinations|json_script:"hello-data" }}
+
+ <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""></script>
+
+
+<script type="text/javascript">
+    var data = JSON.parse(document.getElementById('hello-data').textContent);
+    console.log(data);
+
+    const markerLayer = L.layerGroup();
+
+    const base = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?", {
+      maxZoom: 18,
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+    });
+
+    let mymap = L.map("mapid", {
+        center: [52.088, 5.4],
+        zoom: 12,
+        layers: [base, markerLayer],
+    });
+
+    function popupText(d) {
+      return `<b>${d.destination__name}</b> (${d.count}x)`;
+    }
+
+    function addMarker(d) {
+      L.marker([d.destination__lat, d.destination__lon], {
+        icon: L.divIcon({
+          html: "<i class='fas fa-map-marker-alt fa-2x' style='font-size: 1.2em;'></i>",
+          iconSize: [50, 50],
+          className: `destination`,
+        }),
+      }).addTo(markerLayer).bindPopup(popupText(d));
+    }
+
+    function update(data) {
+      markerLayer.clearLayers();
+      data.filter(d => d.destination__lat && d.destination__lon)
+        .map(d => addMarker(d));
+      if (data.length > 0 && data[0].destination__lat && data[0].destination__lon) {
+        mymap.flyTo(L.latLng(data[0].destination__lat, data[0].destination__lon));
+      }
+    }
+
+    update(data);
+</script>
+
+{% endblock %}
