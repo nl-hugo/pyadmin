@@ -7,11 +7,13 @@
 # deploy to heroku
 
 ## commit
-heroku app is linked to git repo
+heroku app is linked to git repo and automatic deploys enabled
 
     git add .
     git commit -m 'message'
     git push origin master
+
+on push, Heroku will pickup the latest version from the master branch and deploy
 
 
 # create env and install requirements
