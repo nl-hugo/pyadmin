@@ -1,41 +1,25 @@
-name: py-geo-svc
-channels:
-  - anaconda
-  - conda-forge
-  - defaults
-dependencies:
-  - asn1crypto=0.24.0=py37_1003
-  - ca-certificates=2019.5.15=0
-  - certifi=2019.3.9=py37_0
-  - cffi=1.12.3=py37hb32ad35_0
-  - chardet=3.0.4=py37_1003
-  - cryptography=2.7=py37hb32ad35_0
-  - django=2.2.1=py37_0
-  - djangorestframework=3.9.4=py_0
-  - geographiclib=1.49=py_0
-  - geopy=1.20.0=py_0
-  - idna=2.8=py37_1000
-  - openssl=1.1.1c=he774522_1
-  - pip=19.1.1=py37_0
-  - pycparser=2.19=py37_1
-  - pyopenssl=19.0.0=py37_0
-  - pysocks=1.7.0=py37_0
-  - python=3.7.3=h8c8aaf0_1
-  - pytz=2019.1=py_0
-  - requests=2.22.0=py37_0
-  - setuptools=41.0.1=py37_0
-  - six=1.12.0=py37_1000
-  - sqlite=3.28.0=he774522_0
-  - sqlparse=0.3.0=py_0
-  - urllib3=1.24.3=py37_0
-  - vc=14.1=h21ff451_3
-  - vs2015_runtime=15.5.2=3
-  - wheel=0.33.4=py37_0
-  - win_inet_pton=1.1.0=py37_0
-  - wincertstore=0.2=py37_0
-  - pip:
-    - dj-database-url==0.5.0
-    - django-filter==2.1.0
-    - django-heroku==0.3.1
-    - psycopg2==2.8.3
-    - whitenoise==4.1.2
+asn1crypto==0.24.0
+certifi==2019.3.9
+cffi==1.12.3
+chardet==3.0.4
+cryptography==2.7
+dj-database-url==0.5.0
+Django==2.2.1
+django-filter==2.1.0
+django-heroku==0.3.1
+djangorestframework==3.9.4
+geographiclib==1.49
+geopy==1.20.0
+idna==2.8
+psycopg2==2.8.3
+pycparser==2.19
+pyOpenSSL==19.0.0
+PySocks==1.7.0
+pytz==2019.1
+requests==2.22.0
+six==1.12.0
+sqlparse==0.3.0
+urllib3==1.24.3
+whitenoise==4.1.2
+win-inet-pton==1.1.0
+wincertstore==0.2
