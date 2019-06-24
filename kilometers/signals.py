@@ -97,7 +97,7 @@ def pre_save_trip_receiver(sender, instance, **kwargs):
         distance, instance.api_return_code, instance.api_message = getDrivingDistance(
             instance.origin.asGeoLocation(), instance.destination.asGeoLocation())
         instance.distance = distance * 2 if instance.is_return else distance
-        instance.allowance = distance * .19 # 19 cents a kilometer
+        instance.allowance = instance.distance * .19 # 19 cents a kilometer
     else:
 
         logger.info('No recompute needed')

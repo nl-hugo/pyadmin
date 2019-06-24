@@ -1,7 +1,5 @@
 from django.test import TestCase
 from datetime import datetime
-# from decimal import Decimal
-
 from kilometers.models import Location, Trip
 
 
@@ -63,13 +61,12 @@ class TripTestCase(TestCase):
         self.assertEqual(trip.origin.name, 'Domtoren')
         self.assertEqual(trip.destination.name, 'Grolsch Veste')
         self.assertEqual(trip.is_return, False)
-        if trip.api_return_code == '200':
+        if trip.api_return_code == 200:
             self.assertEqual(trip.distance, 139) # 139km one way
-            self.assertEqual(trip.allowance, Decimal('1.14'))
+            self.assertEqual(round(trip.allowance, 2), 26.41)
         else:
             self.fail('API return code {} not OK, please rerun test!'.format(
                 trip.api_return_code))
-
 
     def test_update_date(self):
         """
@@ -108,9 +105,9 @@ class TripTestCase(TestCase):
 
         self.assertEqual(trip.destination.name, 'Grolsch Veste')
         self.assertEqual(trip.is_return, True)
-        if trip.api_return_code == '200':
+        if trip.api_return_code == 200:
             self.assertEqual(trip.distance, 2*139) # 139km one way
-            self.assertEqual(trip.allowance, Decimal('30.14'))
+            self.assertEqual(round(trip.allowance, 2), 52.82)
         else:
             self.fail('API return code {} not OK, please rerun test!'.format(
                 trip.api_return_code))
