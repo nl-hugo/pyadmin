@@ -1,5 +1,5 @@
 {
-  "name": "ZZP-admin",
+  "name": "pyadmin",
   "description": "ZZP Admin app to be deployed to Heroku.",
   "image": "heroku/python",
   "repository": "https://github.com/nl-hugo/pyadmin",
