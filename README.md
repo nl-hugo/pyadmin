@@ -7,7 +7,7 @@
 # deploy to heroku
 
 ## commit
-heroku app is linked to git repo and automatic deploys enabled
+heroku app is linked to git repo with automatic deploys enabled
 
     git add .
     git commit -m 'message'
@@ -17,25 +17,22 @@ on push, Heroku will pickup the latest version from the master branch and deploy
 
 
 # create env and install requirements
+Use pip freeze, not conda export
 
-    conda env create -f environment.yml
-
-
-
-
-# setup django
+    pip freeze > requirements.txt
 
 
 
-## migrate
-    python manage.py migrate
+## setup django
+
+    heroku run python manage.py migrate -a pyadmin
+
 
 ## create superuser
-    python manage.py createsuperuser
+    heroku run python manage.py createsuperuser -a pyadmin
 
-## run server
-    python manage.py runserver
 
+heroku logs --tail -a pyadmin
 
 
 
@@ -54,13 +51,16 @@ or single test:
     python manage.py loaddata ./kilometers/fixtures/tests.json
 
 
+## Run locally
+    heroku local web -f Procfile.windows
+
 
 # run in command line
 
-    import os
-    import django
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pyadmin.settings')
-    django.setup()
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pyadmin.settings')
+django.setup()
 
 
 
@@ -73,6 +73,9 @@ or single test:
 
 ## freeze packages
     conda env export > requirements.txt
+
+##
+    pip install -r requirements.txt
 
 
 # TODO's:

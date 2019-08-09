@@ -1,12 +1,13 @@
-from django.db import models
+import logging
+
+import geopy
 from django.core.validators import RegexValidator
-
-import logging, geopy
-
+from django.db import models
 
 logger = logging.getLogger(__name__)
 
 validate_zip_code = RegexValidator(r'^\d{4}\s?\w{2}$', 'Invalid zip code.')
+
 
 def quarter(date):
     return '{}-Q{}'.format(date.year, (date.month - 1) // 3 + 1)
@@ -35,7 +36,7 @@ class Trip(models.Model):
     year = models.PositiveSmallIntegerField(default=0)
     origin = models.ForeignKey(Location, on_delete=models.PROTECT,
         related_name='trip_from')
-    destination =  models.ForeignKey(Location, on_delete=models.PROTECT,
+    destination = models.ForeignKey(Location, on_delete=models.PROTECT,
         related_name='trip_to')
     description = models.CharField(max_length=500, blank=True)
     is_return = models.BooleanField(default=True)

@@ -1,7 +1,8 @@
 from django.contrib import admin
+
 from .models import Location, Trip
 
-# Register your models here.
+
 class LocationAdmin(admin.ModelAdmin):
     model = Location
     list_display = ('name', 'zip_code', 'city', 'lat', 'lon', )
