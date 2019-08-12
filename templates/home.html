@@ -8,6 +8,7 @@
     {% if user.is_authenticated %}
       <p>ingelogd</p>
       <a class="nav-link" href="{% url 'kilometers:index' %}">Kilometers</a>
+      <a class="nav-link" href="{% url 'uren:index' %}">Uren</a>
     {% else %}
           <a class="btn btn-outline-secondary" href="{% url 'login' %}">Login</a>
     {% endif %}

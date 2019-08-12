@@ -1,0 +1,43 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Uren</li>
+</ol>
+</nav>
+
+
+<div class="row">
+    <div class="col-sm">
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="text">Maand</th>
+                    <th scope="col" class="text-right">Klant</th>
+                    <th scope="col" class="text-right">Project</th>
+                    <th scope="col" class="text-right">Aantal uren</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hour in hours %}
+                <tr>
+                    <td class="text">{{ hour.month|date:"Y-m" }}</td>
+                    <td class="text-right">{{ hour.project__client__name }}</td>
+                    <td class="text-right">{{ hour.project__name }}</td>
+                    <td class="text-right">{{ hour.sum|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No activities yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
