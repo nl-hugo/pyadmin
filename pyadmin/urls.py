@@ -18,18 +18,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.views.generic import TemplateView
-from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()
 # router.registry.extend(kilometers.registry)
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    url(r'^api/', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(template_name='home.html'), name='logout'),
-    url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^kilometers/', include('kilometers.urls')),
     url(r'^uren/', include('uren.urls')),
 ]

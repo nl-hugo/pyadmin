@@ -1,6 +1,8 @@
-import requests, json, logging
+import json
+import logging
+
+import requests
 from geopy.geocoders import Nominatim
-from geopy.location import Location
 
 BASE_URL = 'http://router.project-osrm.org/route/v1/driving/'
 
