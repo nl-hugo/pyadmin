@@ -17,18 +17,26 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="text">Maand</th>
-                    <th scope="col" class="text-right">Klant</th>
-                    <th scope="col" class="text-right">Project</th>
+                    <th scope="col" class="text">Klant</th>
+                    <th scope="col" class="text">Project</th>
+                    <th scope="col" class="text">Activiteit</th>
                     <th scope="col" class="text-right">Aantal uren</th>
+                    <th scope="col" class="text-right">Bedrag</th>
+                    <th scope="col" class="text-right">BTW</th>
+                    <th scope="col" class="text-right">Totaal</th>
                 </tr>
             </thead>
             <tbody>
                 {% for hour in hours %}
                 <tr>
                     <td class="text">{{ hour.month|date:"Y-m" }}</td>
-                    <td class="text-right">{{ hour.project__client__name }}</td>
-                    <td class="text-right">{{ hour.project__name }}</td>
+                    <td class="text">{{ hour.project__client__name }}</td>
+                    <td class="text">{{ hour.project__name }}</td>
+                    <td class="text">{{ hour.activity__description }}</td>
                     <td class="text-right">{{ hour.sum|floatformat:2 }}</td>
+                    <td class="text-right">€ {{ hour.amount|floatformat:2 }}</td>
+                    <td class="text-right">€ {{ hour.vat|floatformat:2 }}</td>
+                    <td class="text-right">€ {{ hour.total|floatformat:2 }}</td>
                 </tr>
                 {% empty %}
                 <tr>

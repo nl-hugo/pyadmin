@@ -1,4 +1,4 @@
-from django.db.models import Count, Sum
+from django.db.models import Sum, F
 from django.db.models.functions import TruncMonth
 from django.views import generic
 
@@ -10,8 +10,15 @@ class UrenListView(generic.ListView):
     context_object_name = 'hours'
     template_name = 'uren/uren.html'
 
-    # uren per maand, per activiteit, per project, per klant
+    # TODO: dit is eigenlijk al een factuur specificatie...
     def get_queryset(self):
-        return ProjectHours.objects.annotate(month=TruncMonth('date')).values(
-            'month', 'project__name', 'project__client__name').annotate(
-            sum=Sum('hours'), count=Count('id'))
+        return ProjectHours.objects.annotate(
+            month=TruncMonth('date'), amount=F('activity__price') * F('hours'), vat=F('amount') * F('activity__vat'),
+            total=F('amount') + F('vat')
+        ).values(
+            'month', 'project__name', 'project__client__name', 'activity__description'
+        ).annotate(
+            sum=Sum('hours'), amount=Sum('amount'), vat=Sum('vat'), total=Sum('total')
+        ).order_by(
+            'month', 'project__client__name', 'project__name', 'activity__description'
+        )

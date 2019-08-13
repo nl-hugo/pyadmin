@@ -45,6 +45,9 @@ class Trip(models.Model):
     api_return_code = models.CharField(max_length=3, null=True, blank=True)
     api_message = models.CharField(max_length=500, null=True, blank=True)
 
+    # TODO: add declarabel j/n
+    # TODO: add link to activity in project hours for declarabele kms
+
     def __str__(self):
         return '{} to {}'.format(self.origin, self.destination)
 

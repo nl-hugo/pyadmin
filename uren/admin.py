@@ -1,36 +1,34 @@
 from django.contrib import admin
 
-from .models import Client, Project, ProjectHours
+from .models import Client, Project, ProjectHours, Unit, Activity
+
+
+class ProjectInline(admin.TabularInline):
+    model = Project
+    extra = 1
 
 
 class ClientAdmin(admin.ModelAdmin):
     model = Client
-    list_display = ('name', )
-    # list_filter = ['city', ]
-    # search_fields = ['name', 'zip_code', 'city', ]
-    # readonly_fields = ('city', 'lat', 'lon',)
+    inlines = [ProjectInline, ]
+    list_display = ('name',)
 
 
 admin.site.register(Client, ClientAdmin)
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    model = Project
-    list_display = ('name', )
-    # list_filter = ['city', ]
-    # search_fields = ['name', 'zip_code', 'city', ]
-    # readonly_fields = ('city', 'lat', 'lon',)
-
-
-admin.site.register(Project, ProjectAdmin)
-
-
 class ProjectHoursAdmin(admin.ModelAdmin):
     model = ProjectHours
-    list_display = ('date', 'project', 'hours', )
-    # list_filter = ['city', ]
-    # search_fields = ['name', 'zip_code', 'city', ]
-    # readonly_fields = ('city', 'lat', 'lon',)
+    list_display = ('date', 'project', 'activity', 'hours',)
 
 
 admin.site.register(ProjectHours, ProjectHoursAdmin)
+admin.site.register(Unit)
+
+
+class ActivityAdmin(admin.ModelAdmin):
+    model = Activity
+    list_display = ('code', 'description', 'unit', 'price', 'vat',)
+
+
+admin.site.register(Activity, ActivityAdmin)
