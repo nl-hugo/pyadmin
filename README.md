@@ -83,4 +83,10 @@ django.setup()
 - saving a location breaks if zip code does not exist
 - expose driving distance API to support /distance/3512JC/3584AA/?format=json
 
+- trips could be billable
+- make monthly invoice per client, with project > activity breakdown
+- invoice line items should refer to hours or trips
+- rename projectHours to projectActivity/product?
+- rename activity to product?
+
 
