@@ -4,6 +4,8 @@ import geopy
 from django.core.validators import RegexValidator
 from django.db import models
 
+from uren.models import Project, Activity
+
 logger = logging.getLogger(__name__)
 
 validate_zip_code = RegexValidator(r'^\d{4}\s?\w{2}$', 'Invalid zip code.')
@@ -34,26 +36,23 @@ class Trip(models.Model):
     date = models.DateField()
     quarter = models.CharField(max_length=8)
     year = models.PositiveSmallIntegerField(default=0)
-    origin = models.ForeignKey(Location, on_delete=models.PROTECT,
-        related_name='trip_from')
-    destination = models.ForeignKey(Location, on_delete=models.PROTECT,
-        related_name='trip_to')
+    origin = models.ForeignKey(Location, on_delete=models.PROTECT, related_name='trip_from')
+    destination = models.ForeignKey(Location, on_delete=models.PROTECT, related_name='trip_to')
     description = models.CharField(max_length=500, blank=True)
     is_return = models.BooleanField(default=True)
     distance = models.PositiveSmallIntegerField(default=0)
     allowance = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     api_return_code = models.CharField(max_length=3, null=True, blank=True)
     api_message = models.CharField(max_length=500, null=True, blank=True)
-
-    # TODO: add declarabel j/n
-    # TODO: add link to activity in project hours for declarabele kms
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='trips', blank=True, null=True)
+    activity = models.ForeignKey(Activity, on_delete=models.PROTECT, related_name='trips', blank=True, null=True)
 
     def __str__(self):
         return '{} to {}'.format(self.origin, self.destination)
 
     def save(self, *args, **kwargs):
         self.quarter = quarter(self.date)
-        self.year = self.date.year 
+        self.year = self.date.year
         super().save(*args, **kwargs)
 
     class Meta:
