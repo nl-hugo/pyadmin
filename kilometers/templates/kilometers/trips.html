@@ -22,6 +22,7 @@
                 <tr>
                     <th scope="col" class="text">Kwartaal</th>
                     <th scope="col" class="text-right">Afstand (km)</th>
+                    <th scope="col" class="text-right">Vergoeding</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@
                 <tr>
                     <td class="text">{{ trip.quarter }}</td>
                     <td class="text-right">{{ trip.distance }}</td>
+                    <td class="text-right">€{{ trip.allowance|floatformat:2 }}</td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -82,6 +84,7 @@
                     <th scope="col" class="text"></th>
                     <th scope="col" class="text">Naar</th>
                     <th scope="col" class="text-right">Afstand (km)</th>
+                    <th scope="col" class="text-right">Vergoeding</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,6 +106,12 @@
                     </td>
                     <td class="text">{{ trip.destination }}</td>
                     <td class="text-right">{{ trip.distance }}</td>
+                    <td class="text-right">
+                        {% if trip.activity.is_billable %}
+                        <i class="fas fa-comment-dollar text-primary" title="declarabel"></i>
+                        {% endif %}
+                        €{{ trip.allowance|floatformat:2 }}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -118,6 +127,7 @@
                     <th scope="col" class="text"></th>
                     <th scope="col" class="text"></th>
                     <th scope="col" class="text-right">{{ total_distance }}</th>
+                    <th scope="col" class="text-right">€{{ total_allowance|floatformat:2 }}</th>
                 </tr>
             </thead>
         </table>

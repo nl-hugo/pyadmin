@@ -4,7 +4,7 @@ import geopy
 from django.core.validators import RegexValidator
 from django.db import models
 
-from uren.models import Project, Activity
+from uren.models import Project, Activity, get_default_km_activity
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,8 @@ class Trip(models.Model):
     api_return_code = models.CharField(max_length=3, null=True, blank=True)
     api_message = models.CharField(max_length=500, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='trips', blank=True, null=True)
-    activity = models.ForeignKey(Activity, on_delete=models.PROTECT, related_name='trips', blank=True, null=True)
+    activity = models.ForeignKey(Activity, on_delete=models.PROTECT, related_name='trips', blank=True, null=True,
+                                 default=get_default_km_activity)
 
     def __str__(self):
         return '{} to {}'.format(self.origin, self.destination)
