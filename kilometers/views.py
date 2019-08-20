@@ -7,7 +7,7 @@ from kilometers.filters import TripFilter
 from kilometers.models import Trip
 
 
-def searchTrips(request):
+def search_trips(request):
     trip_list = Trip.objects.all()
     trip_filter = TripFilter(request.GET, queryset=trip_list)
 
@@ -17,8 +17,7 @@ def searchTrips(request):
     trips = paginator.get_page(page)
 
     # Provide totals
-    totals = trip_filter.qs.aggregate(distance=Coalesce(Sum('distance'), 0),
-                                      allowance=Coalesce(Sum('allowance'), 0), )
+    totals = trip_filter.qs.aggregate(distance=Coalesce(Sum('distance'), 0), )
 
     # Aggregate by destination
     destinations = trip_filter.qs.values('destination__name',
@@ -26,9 +25,7 @@ def searchTrips(request):
         count=Count(1)).order_by('-count')  # won't work without the order_by!
 
     # Aggregate by quarter
-    quarterly = trip_filter.qs.values('quarter').annotate(
-        distance=Sum('distance'),
-        allowance=Sum('allowance')).order_by('-quarter')
+    quarterly = trip_filter.qs.values('quarter').annotate(distance=Sum('distance')).order_by('-quarter')
 
     return render(request, 'kilometers/trips.html', {
         'trips': trips,
@@ -36,5 +33,4 @@ def searchTrips(request):
         'quarterly': quarterly,
         'form': trip_filter.form,
         'total_distance': totals.get('distance'),
-        'total_allowance': totals.get('allowance'),
     })

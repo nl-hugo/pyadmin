@@ -9,5 +9,5 @@ app_name = 'kilometers'
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
-    path('', login_required(views.searchTrips), name='index'),
+    path('', login_required(views.search_trips), name='index'),
 ]
