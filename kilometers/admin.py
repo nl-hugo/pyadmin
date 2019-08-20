@@ -5,7 +5,7 @@ from .models import Location, Trip
 
 class LocationAdmin(admin.ModelAdmin):
     model = Location
-    list_display = ('name', 'zip_code', 'city', 'lat', 'lon',)
+    list_display = ('name', 'zip_code', 'city', 'lat', 'lon', 'is_default',)
     list_filter = ['city', ]
     search_fields = ['name', 'zip_code', 'city', ]
     readonly_fields = ('city', 'lat', 'lon',)

@@ -19,9 +19,10 @@ def search_trips(request):
     # Provide totals
     totals = trip_filter.qs.aggregate(distance=Coalesce(Sum('distance'), 0), )
 
-    # Aggregate by destination
-    destinations = trip_filter.qs.values('destination__name',
-                                         'destination__lat', 'destination__lon').annotate(
+    # Aggregate by destination, excluding the default location
+    destinations = trip_filter.qs.exclude(destination__is_default=True).values('destination__name',
+                                                                               'destination__lat',
+                                                                               'destination__lon').annotate(
         count=Count(1)).order_by('-count')  # won't work without the order_by!
 
     # Aggregate by quarter
