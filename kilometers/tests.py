@@ -1,5 +1,7 @@
-from django.test import TestCase
 from datetime import datetime
+
+from django.test import TestCase
+
 from kilometers.models import Location, Trip
 
 
@@ -7,8 +9,7 @@ class LocationTestCase(TestCase):
 
     def setUp(self):
         Location.objects.create(name='Domtoren', zip_code='3512 jc',
-            city='should_be_overwritten')
-
+                                city='should_be_overwritten')
 
     def test_save_location(self):
         """
@@ -52,8 +53,8 @@ class TripTestCase(TestCase):
         origin = Trip.objects.first().origin
         destination = Location.objects.get(name='Grolsch Veste')
         trip = Trip.objects.create(date=datetime(2019, 6, 1).date(),
-            origin=origin, destination=destination, is_return=False,
-            description='Test trip')
+                                   origin=origin, destination=destination, is_return=False,
+                                   description='Test trip')
 
         self.assertEqual(trip.date, datetime(2019, 6, 1).date())
         self.assertEqual(trip.year, 2019)
@@ -62,8 +63,7 @@ class TripTestCase(TestCase):
         self.assertEqual(trip.destination.name, 'Grolsch Veste')
         self.assertEqual(trip.is_return, False)
         if trip.api_return_code == 200:
-            self.assertEqual(trip.distance, 139) # 139km one way
-            self.assertEqual(round(trip.allowance, 2), 26.41)
+            self.assertEqual(trip.distance, 139)  # 139km one way
         else:
             self.fail('API return code {} not OK, please rerun test!'.format(
                 trip.api_return_code))
@@ -91,8 +91,7 @@ class TripTestCase(TestCase):
         trip.save()
 
         self.assertEqual(trip.is_return, False)
-        self.assertEqual(trip.distance, 3) # 3km one way
-        self.assertEqual(round(trip.allowance, 2), 0.57)
+        self.assertEqual(trip.distance, 3)  # 3km one way
 
     def test_update_destination(self):
         """
@@ -106,8 +105,7 @@ class TripTestCase(TestCase):
         self.assertEqual(trip.destination.name, 'Grolsch Veste')
         self.assertEqual(trip.is_return, True)
         if trip.api_return_code == 200:
-            self.assertEqual(trip.distance, 2*139) # 139km one way
-            self.assertEqual(round(trip.allowance, 2), 52.82)
+            self.assertEqual(trip.distance, 2 * 139)  # 139km one way
         else:
             self.fail('API return code {} not OK, please rerun test!'.format(
                 trip.api_return_code))

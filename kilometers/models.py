@@ -25,7 +25,7 @@ class Location(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.name, self.zip_code)
 
-    def asGeoLocation(self):
+    def as_geo_location(self):
         return geopy.location.Location(point=(self.lat, self.lon))
 
     class Meta:
@@ -41,7 +41,6 @@ class Trip(models.Model):
     description = models.CharField(max_length=500, blank=True)
     is_return = models.BooleanField(default=True)
     distance = models.PositiveSmallIntegerField(default=0)
-    allowance = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     api_return_code = models.CharField(max_length=3, null=True, blank=True)
     api_message = models.CharField(max_length=500, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='trips', blank=True, null=True)
