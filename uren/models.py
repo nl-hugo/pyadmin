@@ -1,6 +1,10 @@
 from django.db import models
 
 
+def get_default_km_activity():
+    return Activity.objects.filter(is_billable=False, unit__code='KM').first()
+
+
 class Client(models.Model):
     name = models.CharField(max_length=100)
 
@@ -33,6 +37,7 @@ class Activity(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT, null=True, related_name='units')
     price = models.DecimalField(max_digits=5, decimal_places=2)
     vat = models.DecimalField(max_digits=3, decimal_places=2, default=0.21)
+    is_billable = models.BooleanField(default=False)
 
     def __str__(self):
         return '({}) {}'.format(self.code, self.description)

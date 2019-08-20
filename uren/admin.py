@@ -28,7 +28,7 @@ admin.site.register(Unit)
 
 class ActivityAdmin(admin.ModelAdmin):
     model = Activity
-    list_display = ('code', 'description', 'unit', 'price', 'vat',)
+    list_display = ('code', 'description', 'is_billable', 'unit', 'price', 'vat',)
 
 
 admin.site.register(Activity, ActivityAdmin)
