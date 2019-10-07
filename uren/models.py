@@ -49,12 +49,20 @@ class Activity(models.Model):
 
 class ProjectHours(models.Model):
     date = models.DateField()
-    hours = models.DecimalField(max_digits=5, decimal_places=2)
+    year = models.PositiveSmallIntegerField(default=0)
+    week = models.PositiveSmallIntegerField(default=0)
+    hours = models.DecimalField(max_digits=5, decimal_places=2, default=8)
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='project')
     activity = models.ForeignKey('Activity', on_delete=models.PROTECT, null=True, related_name='activity')
+    description = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.date, self.activity)
+
+    def save(self, *args, **kwargs):
+        self.week = self.date.strftime('%V')
+        self.year = self.date.year
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-date', 'project', 'activity']

@@ -20,6 +20,7 @@ admin.site.register(Client, ClientAdmin)
 class ProjectHoursAdmin(admin.ModelAdmin):
     model = ProjectHours
     list_display = ('date', 'project', 'activity', 'hours',)
+    readonly_fields = ('week', 'year',)
 
 
 admin.site.register(ProjectHours, ProjectHoursAdmin)
